@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجود - مواقيت الصلاة</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>سجود - مواقيت الصلاة</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="#prayer-times">مواقيت الصلاة</a></li>
+                <li><a href="#qibla">اتجاه القبلة</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home">
+        <h2>مرحبًا بكم في موقع سجود</h2>
+        <p>يقدم لكم موقعنا مواقيت الصلاة الدقيقة واتجاه القبلة، بالإضافة إلى الأعياد الإسلامية المهمة.</p>
+    </section>
+    
+    <section id="prayer-times">
+        <h2>مواقيت الصلاة</h2>
+        <p>اختر مدينتك لعرض المواقيت الدقيقة:</p>
+        <select id="city-select">
+            <option value="tripoli">طرابلس</option>
+            <option value="benghazi">بنغازي</option>
+            <option value="misrata">مصراتة</option>
+            <option value="sabha">سبها</option>
+        </select>
+        <div id="times">
+            <p>الفجر: <span id="fajr">--:--</span></p>
+            <p>الظهر: <span id="dhuhr">--:--</span></p>
+            <p>العصر: <span id="asr">--:--</span></p>
+            <p>المغرب: <span id="maghrib">--:--</span></p>
+            <p>العشاء: <span id="isha">--:--</span></p>
+        </div>
+    </section>
+    
+    <section id="qibla">
+        <h2>اتجاه القبلة</h2>
+        <p>اضغط على الزر أدناه لمعرفة اتجاه القبلة بناءً على موقعك الحالي.</p>
+        <button onclick="findQibla()">عرض اتجاه القبلة</button>
+        <p id="qibla-direction"></p>
+    </section>
+    
+    <section id="islamic-holidays">
+        <h2>الأعياد الإسلامية</h2>
+        <ul>
+            <li>عيد الفطر - 1 شوال</li>
+            <li>عيد الأضحى - 10 ذو الحجة</li>
+            <li>الإسراء والمعراج - 27 رجب</li>
+            <li>المولد النبوي - 12 ربيع الأول</li>
+        </ul>
+    </section>
+    
+    <footer>
+        <p>تواصل معنا عبر البريد الإلكتروني: <a href="mailto:moataz10abrahem@gmail.com">moataz10abrahem@gmail.com</a></p>
+        <p>أو عبر الهاتف: 0914381161</p>
+        <p>&copy; 2025 سجود - جميع الحقوق محفوظة</p>
+    </footer>
+    
+    <script>
+        function findQibla() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const qiblaDirection = getQiblaDirection(lat, lon);
+                    document.getElementById("qibla-direction").textContent = "اتجاه القبلة: " + qiblaDirection + "°";
+                }, () => {
+                    document.getElementById("qibla-direction").textContent = "تعذر تحديد الموقع";
+                });
+            } else {
+                document.getElementById("qibla-direction").textContent = "المتصفح لا يدعم تحديد الموقع";
+            }
+        }
+
+        function getQiblaDirection(lat, lon) {
+            const kaabaLat = 21.4225;
+            const kaabaLon = 39.8262;
+            const deltaLon = (kaabaLon - lon) * Math.PI / 180;
+            const latRad = lat * Math.PI / 180;
+            const kaabaLatRad = kaabaLat * Math.PI / 180;
+            return Math.atan2(Math.sin(deltaLon), (Math.cos(latRad) * Math.tan(kaabaLatRad) - Math.sin(latRad) * Math.cos(deltaLon))) * 180 / Math.PI;
+        }
+    </script>
+</body>
+</html>
